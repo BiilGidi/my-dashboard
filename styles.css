@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+/* --- THEMES --- */
+.theme-deep-sea { --bg-color: #0f172a; --card-bg: #1e293b; --text-main: #f8fafc; --accent: #38bdf8; --text-dim: #94a3b8; }
+.theme-primrose { --bg-color: #fdf2f8; --card-bg: #ffffff; --text-main: #831843; --accent: #db2777; --text-dim: #be185d; }
+.theme-desert-sand { --bg-color: #fefae0; --card-bg: #faedcd; --text-main: #283618; --accent: #bc6c25; --text-dim: #606c38; }
+.theme-ice-castle { --bg-color: #f0f9ff; --card-bg: #e0f2fe; --text-main: #0c4a6e; --accent: #0284c7; --text-dim: #0369a1; }
+.theme-deep-space { --bg-color: #050505; --card-bg: #171717; --text-main: #ffffff; --accent: #8b5cf6; --text-dim: #71717a; }
+
+body {
+    background-color: var(--bg-color); color: var(--text-main);
+    font-family: 'Inter', sans-serif; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; min-height: 100vh; margin: 0;
+    transition: background-color 0.4s ease; padding: 20px;
+}
+
+.theme-switcher { position: absolute; top: 20px; right: 20px; font-size: 0.8rem; }
+#themeSelect { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--accent); padding: 5px; border-radius: 4px; }
+
+.title { 
+    font-size: 2.5rem; margin-bottom: 10px; padding: 5px 10px; border-radius: 8px; transition: background 0.3s; outline: none; 
+}
+.title:hover { background: rgba(128, 128, 128, 0.1); }
+
+.divider { width: 50px; height: 4px; background: var(--accent); border-radius: 2px; margin-bottom: 20px; }
+#currentDate { text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin: 0; }
+#currentTime { font-size: 4rem; font-weight: 300; margin: 0 0 30px 0; }
+
+.todo-container { width: 100%; max-width: 400px; display: flex; flex-direction: column; }
+#taskInput {
+    width: 100%; padding: 12px; background: var(--card-bg); border: 1px solid var(--text-dim);
+    color: var(--text-main); border-radius: 8px; margin-bottom: 20px; box-sizing: border-box; outline: none;
+}
+#taskInput:focus { border-color: var(--accent); }
+
+ul { list-style: none; padding: 0; margin: 0; width: 100%; }
+li {
+    background: var(--card-bg); padding: 12px; margin-bottom: 10px; border-radius: 6px;
+    display: flex; justify-content: space-between; align-items: center; cursor: grab;
+    width: 100%; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.dragging { opacity: 0.5; border: 2px dashed var(--accent); }
+.delete-btn { background: #ef4444; border: none; color: white; border-radius: 4px; padding: 4px 10px; cursor: pointer; }
+
+details { margin-top: 20px; color: var(--text-dim); width: 100%; }
+summary { cursor: pointer; padding: 10px 0; }
+#completedTasks li { opacity: 0.5; text-decoration: line-through; }
