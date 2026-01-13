@@ -5,7 +5,7 @@
 .theme-primrose { --bg-color: #fdf2f8; --card-bg: #ffffff; --text-main: #831843; --accent: #db2777; --text-dim: #be185d; }
 .theme-desert-sand { --bg-color: #fefae0; --card-bg: #faedcd; --text-main: #283618; --accent: #bc6c25; --text-dim: #606c38; }
 .theme-ice-castle { --bg-color: #f0f9ff; --card-bg: #e0f2fe; --text-main: #0c4a6e; --accent: #0284c7; --text-dim: #0369a1; }
-.theme-deep-space { --bg-color: #050505; --card-bg: #171717; --text-main: #ffffff; --accent: #8b5cf6; --text-dim: #71717a; }
+.theme-outer-space { --bg-color: #050505; --card-bg: #171717; --text-main: #ffffff; --accent: #8b5cf6; --text-dim: #71717a; }
 
 body {
     background-color: var(--bg-color); color: var(--text-main);
@@ -17,31 +17,44 @@ body {
 .theme-switcher { position: absolute; top: 20px; right: 20px; font-size: 0.8rem; }
 #themeSelect { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--accent); padding: 5px; border-radius: 4px; }
 
-.title { 
-    font-size: 2.5rem; margin-bottom: 10px; padding: 5px 10px; border-radius: 8px; transition: background 0.3s; outline: none; 
-}
-.title:hover { background: rgba(128, 128, 128, 0.1); }
+.title { font-size: 2.5rem; margin-bottom: 10px; outline: none; }
+#userName { border-bottom: 2px dashed var(--text-dim); padding: 0 5px; cursor: text; }
+#userName:focus { border-bottom-color: var(--accent); outline: none; }
 
 .divider { width: 50px; height: 4px; background: var(--accent); border-radius: 2px; margin-bottom: 20px; }
 #currentDate { text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin: 0; }
 #currentTime { font-size: 4rem; font-weight: 300; margin: 0 0 30px 0; }
 
-.todo-container { width: 100%; max-width: 400px; display: flex; flex-direction: column; }
+.todo-container { width: 100%; max-width: 400px; }
 #taskInput {
     width: 100%; padding: 12px; background: var(--card-bg); border: 1px solid var(--text-dim);
     color: var(--text-main); border-radius: 8px; margin-bottom: 20px; box-sizing: border-box; outline: none;
 }
-#taskInput:focus { border-color: var(--accent); }
 
-ul { list-style: none; padding: 0; margin: 0; width: 100%; }
 li {
-    background: var(--card-bg); padding: 12px; margin-bottom: 10px; border-radius: 6px;
-    display: flex; justify-content: space-between; align-items: center; cursor: grab;
-    width: 100%; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background: var(--card-bg); padding: 15px; margin-bottom: 10px; border-radius: 8px;
+    display: flex; align-items: center; cursor: grab; width: 100%; box-sizing: border-box;
 }
-.dragging { opacity: 0.5; border: 2px dashed var(--accent); }
-.delete-btn { background: #ef4444; border: none; color: white; border-radius: 4px; padding: 4px 10px; cursor: pointer; }
 
-details { margin-top: 20px; color: var(--text-dim); width: 100%; }
-summary { cursor: pointer; padding: 10px 0; }
-#completedTasks li { opacity: 0.5; text-decoration: line-through; }
+/* Larger Check Circles */
+.check-btn {
+    font-size: 1.5rem; margin-right: 15px; cursor: pointer; color: var(--accent);
+    user-select: none; transition: transform 0.1s;
+}
+.check-btn:active { transform: scale(1.2); }
+
+.task-content { flex-grow: 1; display: flex; flex-direction: column; }
+.task-text { font-weight: 400; outline: none; cursor: text; }
+.task-time { font-size: 0.7rem; color: var(--text-dim); margin-top: 4px; }
+
+/* Delete Button Improvements */
+.delete-btn {
+    background: transparent; border: none; color: var(--text-dim);
+    font-size: 1.2rem; cursor: pointer; padding: 5px 10px; border-radius: 6px;
+    transition: all 0.2s; margin-left: 10px;
+}
+.delete-btn:hover { background: #ef4444; color: white; }
+
+details { margin-top: 20px; color: var(--text-dim); }
+#completedTasks li { opacity: 0.5; }
+#completedTasks .task-text { text-decoration: line-through; }
