@@ -1,94 +1,60 @@
-// --- 1. GREETING LOGIC ---
-const greeting = document.getElementById('greeting');
-const savedGreeting = localStorage.getItem('userGreeting');
-if (savedGreeting) greeting.textContent = savedGreeting;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
-greeting.addEventListener('blur', () => {
-    localStorage.setItem('userGreeting', greeting.textContent);
-});
+/* --- THEMES --- */
+.theme-deep-sea { --bg-color: #0f172a; --card-bg: #1e293b; --text-main: #f8fafc; --accent: #38bdf8; --text-dim: #94a3b8; }
+.theme-primrose { --bg-color: #fdf2f8; --card-bg: #ffffff; --text-main: #831843; --accent: #db2777; --text-dim: #be185d; }
+.theme-desert-sand { --bg-color: #fefae0; --card-bg: #faedcd; --text-main: #283618; --accent: #bc6c25; --text-dim: #606c38; }
+.theme-ice-castle { --bg-color: #f0f9ff; --card-bg: #e0f2fe; --text-main: #0c4a6e; --accent: #0284c7; --text-dim: #0369a1; }
+.theme-outer-space { --bg-color: #050505; --card-bg: #171717; --text-main: #ffffff; --accent: #8b5cf6; --text-dim: #71717a; }
 
-// --- 2. THEME LOGIC ---
-const themeSelect = document.getElementById('themeSelect');
-const currentTheme = localStorage.getItem('theme') || 'theme-deep-sea';
-document.body.className = currentTheme;
-themeSelect.value = currentTheme;
-
-themeSelect.addEventListener('change', (e) => {
-    document.body.className = e.target.value;
-    localStorage.setItem('theme', e.target.value);
-});
-
-// --- 3. CLOCK LOGIC ---
-function updateClock() {
-    const now = new Date();
-    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', dateOptions);
-    document.getElementById('currentTime').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-// --- 4. TASK LOGIC ---
-let tasks = JSON.parse(localStorage.getItem('myTasks')) || [];
-const taskInput = document.getElementById('taskInput');
-const activeList = document.getElementById('activeTasks');
-const completedList = document.getElementById('completedTasks');
-
-taskInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && taskInput.value.trim() !== "") {
-        tasks.push({ id: Date.now(), text: taskInput.value, completed: false });
-        taskInput.value = "";
-        saveAndRender();
-    }
-});
-
-function toggleTask(id) {
-    const task = tasks.find(t => t.id === id);
-    if (task) task.completed = !task.completed;
-    saveAndRender();
+body {
+    background-color: var(--bg-color); color: var(--text-main);
+    font-family: 'Inter', sans-serif; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; min-height: 100vh; margin: 0;
+    transition: background-color 0.4s ease; padding: 20px;
 }
 
-function deleteTask(id) {
-    tasks = tasks.filter(t => t.id !== id);
-    saveAndRender();
+.theme-switcher { position: absolute; top: 20px; right: 20px; font-size: 0.8rem; }
+#themeSelect { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--accent); padding: 5px; border-radius: 4px; }
+
+.title { font-size: 2.5rem; margin-bottom: 10px; outline: none; }
+#userName { border-bottom: 2px dashed var(--text-dim); padding: 0 5px; cursor: text; }
+#userName:focus { border-bottom-color: var(--accent); outline: none; }
+
+.divider { width: 50px; height: 4px; background: var(--accent); border-radius: 2px; margin-bottom: 20px; }
+#currentDate { text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin: 0; }
+#currentTime { font-size: 4rem; font-weight: 300; margin: 0 0 30px 0; }
+
+.todo-container { width: 100%; max-width: 400px; }
+#taskInput {
+    width: 100%; padding: 12px; background: var(--card-bg); border: 1px solid var(--text-dim);
+    color: var(--text-main); border-radius: 8px; margin-bottom: 20px; box-sizing: border-box; outline: none;
 }
 
-function saveAndRender() {
-    localStorage.setItem('myTasks', JSON.stringify(tasks));
-    activeList.innerHTML = "";
-    completedList.innerHTML = "";
-
-    tasks.forEach((task) => {
-        const li = document.createElement('li');
-        li.draggable = true;
-        li.dataset.id = task.id;
-        li.innerHTML = `
-            <span style="flex-grow:1; cursor:pointer;" onclick="toggleTask(${task.id})">${task.completed ? '✓' : '○'} ${task.text}</span>
-            <button class="delete-btn" onclick="deleteTask(${task.id})">×</button>
-        `;
-        li.addEventListener('dragstart', () => li.classList.add('dragging'));
-        li.addEventListener('dragend', () => li.classList.remove('dragging'));
-
-        if (task.completed) completedList.appendChild(li);
-        else activeList.appendChild(li);
-    });
-    document.getElementById('completedCount').textContent = tasks.filter(t => t.completed).length;
+li {
+    background: var(--card-bg); padding: 15px; margin-bottom: 10px; border-radius: 8px;
+    display: flex; align-items: center; cursor: grab; width: 100%; box-sizing: border-box;
 }
 
-// --- 5. DRAG & DROP ---
-activeList.addEventListener('dragover', e => {
-    e.preventDefault();
-    const draggingItem = document.querySelector('.dragging');
-    const siblings = [...activeList.querySelectorAll('li:not(.dragging)')];
-    let nextSibling = siblings.find(sibling => e.clientY <= sibling.offsetTop + sibling.offsetHeight / 2);
-    activeList.insertBefore(draggingItem, nextSibling);
-});
+/* Larger Check Circles */
+.check-btn {
+    font-size: 1.5rem; margin-right: 15px; cursor: pointer; color: var(--accent);
+    user-select: none; transition: transform 0.1s;
+}
+.check-btn:active { transform: scale(1.2); }
 
-activeList.addEventListener('drop', () => {
-    const newOrderIds = [...activeList.querySelectorAll('li')].map(li => parseInt(li.dataset.id));
-    const reorderedActive = newOrderIds.map(id => tasks.find(t => t.id === id));
-    tasks = [...reorderedActive, ...tasks.filter(t => t.completed)];
-    localStorage.setItem('myTasks', JSON.stringify(tasks));
-});
+.task-content { flex-grow: 1; display: flex; flex-direction: column; }
+.task-text { font-weight: 400; outline: none; cursor: text; }
+.task-time { font-size: 0.7rem; color: var(--text-dim); margin-top: 4px; }
 
-saveAndRender();
+/* Delete Button Improvements */
+.delete-btn {
+    background: transparent; border: none; color: var(--text-dim);
+    font-size: 1.2rem; cursor: pointer; padding: 5px 10px; border-radius: 6px;
+    transition: all 0.2s; margin-left: 10px;
+}
+.delete-btn:hover { background: #ef4444; color: white; }
+
+details { margin-top: 20px; color: var(--text-dim); }
+#completedTasks li { opacity: 0.5; }
+#completedTasks .task-text { text-decoration: line-through; }
