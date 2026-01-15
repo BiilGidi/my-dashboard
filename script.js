@@ -41,6 +41,7 @@ updateClock();
 
 // --- 4. TASK LOGIC ---
 let tasks = JSON.parse(localStorage.getItem('myTasks')) || [];
+
 const taskInput = document.getElementById('taskInput');
 const activeList = document.getElementById('activeTasks');
 const completedList = document.getElementById('completedTasks');
@@ -70,8 +71,10 @@ function deleteTask(id) {
 
 function renameTask(id, newText) {
     const task = tasks.find(t => t.id === id);
-    if (task) task.text = newText;
-    localStorage.setItem('myTasks', JSON.stringify(tasks));
+    if (task) {
+        task.text = newText;
+        localStorage.setItem('myTasks', JSON.stringify(tasks));
+    }
 }
 
 function saveAndRender() {
@@ -83,11 +86,15 @@ function saveAndRender() {
         const li = document.createElement('li');
         li.draggable = true;
         li.dataset.id = task.id;
+        
+        // Safety check for undefined time on old tasks
+        const displayTime = task.time || "Just now";
+
         li.innerHTML = `
             <span class="check-btn" onclick="toggleTask(${task.id})">${task.completed ? '●' : '○'}</span>
             <div class="task-content">
                 <span class="task-text" contenteditable="true" onblur="renameTask(${task.id}, this.textContent)">${task.text}</span>
-                <span class="task-time">${task.time}</span>
+                <span class="task-time">${displayTime}</span>
             </div>
             <button class="delete-btn" onclick="deleteTask(${task.id})">×</button>
         `;
